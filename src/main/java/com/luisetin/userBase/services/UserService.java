@@ -16,6 +16,9 @@ public class UserService {
     private UserRepository userRepo;
 
     @Autowired
+    private JWTService jwtService;
+
+    @Autowired
     private AuthenticationManager authManager;
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
@@ -31,9 +34,9 @@ public class UserService {
                         (new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
         if(authentication.isAuthenticated()){
-            return "YES";
+            return jwtService.generateToken(user.getUsername());
         }
-        return "NO";
+        return "Can't generate token, error in authenticate -> UserServ";
 
     }
 
